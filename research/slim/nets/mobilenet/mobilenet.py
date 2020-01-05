@@ -23,9 +23,9 @@ import copy
 import os
 
 import tensorflow as tf
+from tensorflow.contrib import slim as contrib_slim
 
-
-slim = tf.contrib.slim
+slim = contrib_slim
 
 
 @slim.add_arg_scope
@@ -66,7 +66,7 @@ def _make_divisible(v, divisor, min_value=None):
   # Make sure that round down does not go down by more than 10%.
   if new_v < 0.9 * v:
     new_v += divisor
-  return new_v
+  return int(new_v)
 
 
 @contextlib.contextmanager
@@ -110,7 +110,7 @@ _Op = collections.namedtuple('Op', ['op', 'params', 'multiplier_func'])
 
 
 def op(opfunc, multiplier_func=depth_multiplier, **params):
-  multiplier = params.pop('multiplier_transorm', multiplier_func)
+  multiplier = params.pop('multiplier_transform', multiplier_func)
   return _Op(opfunc, params=params, multiplier_func=multiplier)
 
 
